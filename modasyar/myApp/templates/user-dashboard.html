@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modasyar</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <link rel="icon" href="{% static 'images/logo.png'%}" type="image/x-icon" />
+</head>
+<body>
+    <div class="nav">
+        <div class="logo">
+            <a href="{% url 'dashboardlogged' %}">  
+                <img src="{% static 'images/logo.png' %}" alt="logo">
+                <p>Moda<span style="color:#436850;">Syar</span></p>
+            </a>
+        </div>
+        <div class="item">
+            <a href="{% url 'explorelogged' %}" class="menu">
+                Telusuri UMKM
+            </a>
+            <a href="{% url 'tingkatkanmodal' %}" class="menu">
+                Tingkatkan Modal
+            </a>
+            <a href="{% url 'userdashboard' profile_id %}" class="menu">
+                Profile
+            </a>
+
+        </div>
+    </div>
+    <div class="user-dash">
+        <div class="user-menu">
+
+            <a href="{% url 'userdashboard' profile_id %}">
+                Profil Pengguna
+            </a>
+
+            <a href="{% url 'investporto' %}">
+                Portofolio Investasi
+            </a>
+            <a href="{% url 'growth' %}">
+                Perkembangan Bisnis
+            </a>
+            <div class="logout">
+                <a href="{% url 'Dashboard' %}">
+                    Logout
+                </a>
+            </div>
+        </div>
+        <div class="user-profile">
+            <h1>Profile Pengguna</h1>
+            <div class="user-info">
+                <div class="user-name">
+                    <img src="{% static 'images/profile_pic.png'%}" alt="profile-picture">
+                    <p >
+                        {{birth_date}}
+                    </p>
+                    <p >
+                        {{phone_number}}
+                    </p>
+                </div>
+                <div class="profile-singkat">
+                    <div class="left">
+                        <h2 style="margin: 0;">
+                            {{username}}
+                        </h2>
+                        <div class="name">
+                            <p>Nama Depan</p>
+                            <h3>
+                                {{first_name}}
+                            </h3>
+                        </div>
+                        {% comment %} <a href="" id="editdata">
+                            edit
+                            <img src="{% static 'images/edit.png'%}" alt="edit">
+                        </a> {% endcomment %}
+                        <div class="name">
+                            <p>Nama Belakang</p>
+                            <h3 >
+                                {{last_name}}
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/script.js' %}"></script>
+    <footer>
+        <div class="support">
+          <p>Didukung dan Diawasi Oleh :</p>
+          <div class="logo">
+            <img src="{% static 'images/ojk-logo.png'%}" alt="ojk-logo" />
+            <img src="{% static 'images/afsi-logo.png'%}" alt="afsi-logo" />
+          </div>
+        </div>
+        <div class="menu">
+          <h3>Pelajari Kami</h3>
+          <a href="About Us logged.html">About Us</a>
+          <a href="#SnK">Syarat & Ketentuan</a>
+          <a href="#KebijakanPrivasi">Kebijakan Privasi</a>
+        </div>
+      </footer>
+</body>
+</html>

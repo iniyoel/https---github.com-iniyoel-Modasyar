@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modasyar</title>
+    <link rel="stylesheet" href="{% static 'css/styled.css' %}">
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/x-icon" />
+    <style>
+        .withdraw-amount {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .withdraw-amount button {
+            padding: 10px 20px;
+            background-color: #436850;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .withdraw-amount button:hover {
+            background-color: #365a40;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <div class="logo">
+            <a href="{% url 'dashboardlogged' %}">  
+                <img src="{% static 'images/logo.png' %}" alt="logo">
+                <p>Moda<span style="color:#436850;">Syar</span></p>
+            </a>
+        </div>
+        <div class="item">
+            <a href="{% url 'explorelogged' %}" class="menu">
+                Telusuri UMKM
+            </a>
+            <a href="{% url 'tingkatkanmodal' %}" class="menu">
+                Tingkatkan Modal
+            </a>
+            <a href="{% if profile %}{% url 'userdashboard' profile_id=profile.id %}{% else %}# {% endif %}" class="menu">
+                Profile
+            </a>
+        </div>
+    </div>
+    <header>
+        <h1><b>Top-Up</b></h1>
+    </header>
+    <main>
+        <form method="post" action="{% url 'topupOption' %}">
+            {% csrf_token %}
+            <section class="payment-option">
+                <div class="option-header" onclick="toggleDropdown('bank')">
+                    <img src="{% static 'images/Transfer Bank.png' %}" alt="Transfer Bank"> Transfer Bank
+                </div>
+                <div id="bank-options" class="options">
+                    <div class="option">
+                        <input type="radio" id="BCA" name="payment" value="BCA">
+                        <label for="BCA">
+                            <img src="{% static 'images/BCA.png' %}" alt="Bank BCA">
+                            <span>Bank BCA</span>
+                        </label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="Mandiri" name="payment" value="Mandiri">
+                        <label for="Mandiri">
+                            <img src="{% static 'images/Mandiri.png' %}" alt="Bank Mandiri">
+                            <span>Bank Mandiri</span>
+                        </label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="BNI" name="payment" value="BNI">
+                        <label for="BNI">
+                            <img src="{% static 'images/BNI.png' %}" alt="Bank BNI">
+                            <span>Bank BNI</span>
+                        </label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="BRI" name="payment" value="BRI">
+                        <label for="BRI">
+                            <img src="{% static 'images/BRI.png' %}" alt="Bank BRI">
+                            <span>Bank BRI</span>
+                        </label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="Syariah" name="payment" value="Syariah">
+                        <label for="Syariah">
+                            <img src="{% static 'images/BSI.png' %}" alt="Bank Syariah Indonesia">
+                            <span>Bank Syariah Indonesia</span>
+                        </label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="Permata" name="payment" value="Permata">
+                        <label for="Permata">
+                            <img src="{% static 'images/Permata.png' %}" alt="Bank Permata">
+                            <span>Bank Permata</span>
+                        </label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="SeaBank" name="payment" value="SeaBank">
+                        <label for="SeaBank">
+                            <img src="{% static 'images/Seabank.png' %}" alt="SeaBank">
+                            <span>SeaBank</span>
+                        </label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="Other" name="payment" value="Other">
+                        <label for="Other">
+                            <img src="{% static 'images/Bank Lainnya.png' %}" alt="Bank Lainnya">
+                            <span>Bank Lainnya</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+            <section class="payment-option">
+                <div class="option-header" onclick="toggleDropdown('ewallet')">
+                    <img src="{% static 'images/E-Wallet.png' %}" alt="E-Wallet"> E-Wallet
+                </div>
+                <div id="ewallet-options" class="options">
+                    <div class="option">
+                        <input type="radio" id="ShopeePay" name="payment" value="ShopeePay">
+                        <label for="ShopeePay">
+                            <img src="{% static 'images/ShopeePay.png' %}" alt="ShopeePay">
+                            <span>ShopeePay</span>
+                        </label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="Dana" name="payment" value="Dana">
+                        <label for="Dana">
+                            <img src="{% static 'images/Dana.png' %}" alt="Dana">
+                            <span>Dana</span>
+                        </label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="OVO" name="payment" value="OVO">
+                        <label for="OVO">
+                            <img src="{% static 'images/OVO.png' %}" alt="OVO">
+                            <span>OVO</span>
+                        </label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="GoPay" name="payment" value="GoPay">
+                        <label for="GoPay">
+                            <img src="{% static 'images/Gopay.png' %}" alt="Gopay">
+                            <span>Gopay</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+            <div class="withdraw-amount">
+                <p>Masukkan jumlah uang yang ingin anda masukkan</p>
+                <br>
+                {{ form.as_p }}
+                <button type="submit" onclick="redirectToPayment()">Konfirmasi</button>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <div class="support">
+            <p>Didukung dan Diawasi Oleh :</p>
+            <div class="logo">
+                <img src="{% static 'images/ojk-logo.png' %}" alt="ojk-logo" />
+                <img src="{% static 'images/afsi-logo.png' %}" alt="afsi-logo" /> 
+            </div>
+        </div>
+        <div class="menu">
+            <h3>Pelajari Kami</h3>
+            <a href="About Us logged.html">About Us</a>
+            <a href="#SnK">Syarat & Ketentuan</a>
+            <a href="#KebijakanPrivasi">Kebijakan Privasi</a>
+        </div>
+    </footer>
+
+    <script>
+        function toggleDropdown(id) {
+            var element = document.getElementById(id + '-options');
+            element.style.display = element.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function redirectToPayment() {
+            var selectedPayment = document.querySelector('input[name="payment"]:checked');
+            if (selectedPayment) {
+                var paymentType = selectedPayment.value;
+                window.location.href = "{% url 'topupPayment' %}?type=" + encodeURIComponent(paymentType);
+            } else {
+                alert('Silakan pilih opsi pembayaran');
+            }
+        }
+
+        // Set initial state of dropdowns to be hidden
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById('bank-options').style.display = 'none';
+            document.getElementById('ewallet-options').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

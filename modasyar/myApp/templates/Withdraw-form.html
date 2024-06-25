@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModaSyar</title>
+    <link rel="icon" href="{% static 'images/logo.png'%}" type="image/x-icon" />
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+</head>
+<div class="nav">
+    <div class="logo">
+        <a href="{% url 'dashboardlogged' %}">  
+            <img src="{% static 'images/logo.png' %}" alt="logo">
+            <p>Moda<span style="color:#436850;">Syar</span></p>
+        </a>
+    </div>
+    <div class="item">
+        <a href="{% url 'explorelogged' %}" class="menu">
+            Telusuri UMKM
+        </a>
+        <a href="{% url 'tingkatkanmodal' %}" class="menu">
+            Tingkatkan Modal
+        </a>
+        <a href="{% url 'userdashboard' profile_id=profile.id %}" class="menu">
+            Profile
+        </a>
+    </div>
+</div>
+<body>
+    <h1 class="head-Withdrawform">Formulir Data E-Wallet</h1>
+    <form method="post" class="Withdrawform-container">
+        {% csrf_token %}
+        <div class="Withdrawform-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn-submit">Submit</button>
+    </form>    
+</body>
+<footer>
+    <div class="support">
+        <p>Didukung dan Diawasi Oleh :</p>
+        <div class="logo">
+            <img src="{% static 'images/ojk-logo.png' %}" alt="ojk-logo" />
+            <img src="{% static 'images/afsi-logo.png' %}" alt="afsi-logo" /> 
+        </div>
+    </div>
+    <div class="menu">
+        <h3>Pelajari Kami</h3>
+        <a href="{% url 'aboutUslogged' %}">About Us</a>
+        <a href="#SnK">Syarat & Ketentuan</a>
+        <a href="#KebijakanPrivasi">Kebijakan Privasi</a>
+    </div>
+</footer>
+</html>

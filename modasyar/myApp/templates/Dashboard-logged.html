@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;500;700&display=swap"
+      rel="stylesheet"
+      Feather
+      Icons
+      --
+    />
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <!-- My Syle -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+    <!-- Logo Title Bar -->
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/x-icon" />
+    <title>ModaSyar</title>
+  </head>
+  <body>
+    <!-- Navbar Start -->
+    <div class="nav">
+      <div class="logo">
+          <a href="{% url 'dashboardlogged' %}">  
+              <img src="{% static 'images/logo.png' %}" alt="logo">
+              <p>Moda<span style="color:#436850;">Syar</span></p>
+          </a>
+      </div>
+      <div class="item">
+          <a href="{% url 'explorelogged' %}" class="menu">
+              Telusuri UMKM
+          </a>
+          <a href="{% url 'tingkatkanmodal' %}" class="menu">
+              Tingkatkan Modal
+          </a>
+          <a href="{% url 'userdashboard' profile_id=profile.id %} " class="menu">
+            Profile
+          </a>
+      </div>
+    </div>
+
+    <!-- Navbar End -->
+
+    <!-- Hero Start -->
+    <div class="hero">
+      <div class="content">
+        <h1>Satukan Kebaikan Dukung UMKM Untuk Perubahan Yang Nyata!</h1>
+        <p style="font-family: sans-serif;">
+          Pilihan investasi bisnis berkualitas pada UMKM, Waralaba, Startup,
+          hingga Proyek dengan modal mulai dari Rp50 Ribu.
+        </p>
+        <a href="#">Join Us Now !</a>
+      </div>
+      <div class="home-img">
+        <img src="{% static 'images/about.jpeg' %}" alt="home" />
+      </div>
+ 
+    </div>
+
+    <!-- Hero End -->
+
+    <!-- About Section Start -->
+    <section id="about" class="about">
+      <h1>Apa Itu Moda<span style="color: #436850;">Syar</span>?</h1>
+          <p>
+            ModaSyar adalah sebuah platform equity crowdfunding syariah yang
+            dirancang khusus untuk mendukung pertumbuhan dan pengembangan UMKM.
+            Platform ini memberikan kesempatan bagi UMKM untuk mendapatkan akses
+            mudah dan adil terhadap pendanaan, sementara juga memberikan peluang
+            bagi investor yang mencari investasi yang sesuai dengan prinsip
+            syariah.
+          </p>
+    </section>
+    <!-- About Section End -->
+
+    <!-- Investasi Start -->
+    <section id="investasi" class="investasi">
+      <h1>Bagaimana Investasi di Moda<span style="color: #436850;">Syar</span>?</h1>
+
+      <div class="row">
+        <div class="investasi-card">
+          <img
+            src="{% static 'images/1.png' %}"
+            alt="Registrasi Akun"
+            class="investasi-card-img"
+          />
+          <h3 class="investasi-card-title">Registrasi Akun</h3>
+          <p class="investasi-card-keterangan">
+            Lakukan registrasi akun untuk memulai perjalanan anda.
+          </p>
+        </div>
+        <div class="investasi-card">
+          <img src="{% static 'images/2.png' %}" alt="Jelajahi UMKM" class="investasi-card-img" />
+          <h3 class="investasi-card-title">Jelajahi UMKM</h3>
+          <p class="investasi-card-keterangan">
+            Temukan bisnis atau proyek UMKM yang relevan dengan anda.
+          </p>
+        </div>
+        <div class="investasi-card">
+          <img
+            src="{% static 'images/3.png' %}"
+            alt="Mulai Investasi"
+            class="investasi-card-img"
+          />
+          <h3 class="investasi-card-title">Mulai Investasi</h3>
+          <p class="investasi-card-keterangan">
+            Berpartisipasi sebagai investor UMKM dengan modal minimal 50.000
+            rupiah.
+          </p>
+        </div>
+      </div>
+    </section>
+    <!-- Investasi End-->
+
+    <!-- Footer Start -->
+    <footer>
+      <div class="support">
+        <p>Didukung dan Diawasi Oleh :</p>
+        <div class="logo">
+          <img src="{% static 'images/ojk-logo.png' %}" alt="ojk-logo" />
+          <img src="{% static 'images/afsi-logo.png' %}" alt="afsi-logo" />
+        </div>
+      </div>
+      <div class="menu">
+        <h3>Pelajari Kami</h3>
+        <a href="{% url 'aboutUslogged' %}">About Us</a>
+        <a href="#SnK">Syarat & Ketentuan</a>
+        <a href="#KebijakanPrivasi">Kebijakan Privasi</a>
+      </div>
+    </footer>
+    <!-- Footer End -->
+
+    <!-- Feather Icons -->
+    <script>
+      feather.replace();
+    </script>
+
+    <!-- My Javascript -->
+    <script src="script.js"></script>
+  </body>
+</html>

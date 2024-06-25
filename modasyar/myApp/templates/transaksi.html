@@ -1,0 +1,235 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModaSyar</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/x-icon" />
+</head>
+<body>
+    <div class="nav">
+      <div class="logo">
+          <a href="{% url 'dashboardlogged' %}">  
+              <img src="{% static 'images/logo.png' %}" alt="logo">
+              <p>Moda<span style="color:#436850;">Syar</span></p>
+          </a>
+      </div>
+      <div class="item">
+          <a href="{% url 'explorelogged' %}" class="menu">
+              Telusuri UMKM
+          </a>
+          <a href="{% url 'tingkatkanmodal' %}" class="menu">
+              Tingkatkan Modal
+          </a>
+          <a href="{% url 'userdashboard' profile_id=profile.id %}" class="menu">
+              Profile
+          </a>
+      </div>
+    </div>
+
+      <!-- Transaction Section -->
+      <div class="transaction-section">
+        <div class="transaction-desc">
+          <img src="{{ umkm.foto_umkm.url }}" alt="umkm" class="desc-img">
+          <div class="desc-text">
+            <h1>{{ umkm.nama_umkm }}</h1>
+            <p>Jenis bagi hasil : <strong>{{ umkm.jenis_bagi_hasil}}</strong> </p>
+            <p>Target dana terkumpul : <strong>Rp {{ umkm.target_dana|currency_format }}</strong></p>
+            <p>Sektor : <strong>{{ umkm.industri}}</strong></p>
+          </div>
+        </div>
+        <div class="transaction-detail" id="transactionDetail">
+          <h2>Detail Pembelian : </h2>
+          <div class="price-detail">
+            <p>Harga perunit sukuk</p>
+            <p style="font-weight: 600;">Rp <span id="price">{{umkm.harga_sukuk|currency_format}}</span></p>
+          </div>
+          <div class="price-detail">
+            <p>Jumlah Investasi </p> 
+            <p>(min. pembelian 10 unit)</p>
+          </div>
+          <div class="invest-sum">
+            <button class="button decrement" onclick="decrement()">-</button>
+            <input type="text" id="number" class="number" value="10" readonly>
+            <button class="button increment" onclick="increment()">+</button>
+          </div>
+          <h3>Saldo anda saat ini : </h3>
+          <h2> Rp {{ profile.money|currency_format }} </h2>
+          <h1></h1>
+          <div class="price-list">
+            <p>Nilai Investasi</p>
+            <p style="font-weight: 600;">Rp <span id="investPrice">{{umkm.harga_sukuk|currency_format}}</span></p>
+          </div>
+          <div class="price-list">
+            <p>Biaya Transaksi</p>
+            <p style="font-weight: 600;">Rp <span id="transactionFee">2.000</span></p>
+          </div>
+          <h2>Total Pembayaran</h2>
+          <div class="total-price">
+            <h3>Rp <span id="totalPrice"></span></h3>
+            <button onclick="confirmTransaction()">
+              Konfirmasi
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        let number = 10;
+        const pricePerUnit = {{ umkm.harga_sukuk }};
+        const transactionFee = 2000;
+      
+        document.addEventListener('DOMContentLoaded', function() {
+          updatePrices();
+        });
+      
+        function formatNumber(num) {
+          return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+      
+        function updatePrices() {
+          const investPrice = number * pricePerUnit;
+          document.getElementById('investPrice').textContent = formatNumber(investPrice);
+          const totalPrice = investPrice + transactionFee;
+          document.getElementById('totalPrice').textContent = formatNumber(totalPrice);
+      
+          // Update hidden input value
+          document.getElementById('units').value = number;
+        }
+      
+        function decrement() {
+          if (number > 10) {
+            number--;
+            document.getElementById('number').value = number;
+            updatePrices();
+          }
+        }
+      
+        function increment() {
+          number++;
+          document.getElementById('number').value = number;
+          updatePrices();
+        }
+      
+        function confirmTransaction() {
+          const form = document.createElement('form');
+          form.method = 'POST';
+          form.action = "{% url 'transaction' umkm.id %}";
+          const csrfInput = document.createElement('input');
+          csrfInput.type = 'hidden';
+          csrfInput.name = 'csrfmiddlewaretoken';
+          csrfInput.value = '{{ csrf_token }}';
+          form.appendChild(csrfInput);
+          const unitsInput = document.createElement('input');
+          unitsInput.type = 'hidden';
+          unitsInput.name = 'units';
+          unitsInput.value = number;
+          form.appendChild(unitsInput);
+          document.body.appendChild(form);
+          form.submit();
+        }
+      </script>
+      
+
+     {% comment %} <script>
+        let number = 10;
+        const pricePerUnit = {{umkm.harga_sukuk}};
+        const transactionFee = 2000;
+
+        document.addEventListener('DOMContentLoaded', function() {
+          updatePrices();
+        });
+
+        function formatNumber(num) {
+          return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function updatePrices() {
+          const investPrice = number * pricePerUnit;
+          document.getElementById('investPrice').textContent = formatNumber(investPrice);
+          const totalPrice = investPrice + transactionFee;
+          document.getElementById('totalPrice').textContent = formatNumber(totalPrice);
+        }
+
+        function decrement() {
+          if (number > 10) {
+            number--;
+            document.getElementById('number').value = number;
+            updatePrices();
+          }
+        }
+
+        function increment() {
+          number++;
+          document.getElementById('number').value = number;
+          updatePrices();
+        }
+
+        function toggleDropdown(contentId) {
+          var content = document.getElementById(contentId);
+          content.style.display = (content.style.display === "block") ? "none" : "block";
+        }
+
+        function saveSelection(type) {
+          var selectedValue;
+          if (type === 'voucher') {
+            var voucherOptions = document.getElementsByName('voucher');
+            for (var i = 0; i < voucherOptions.length; i++) {
+              if (voucherOptions[i].checked) {
+                selectedValue = voucherOptions[i].value;
+                break;
+              }
+            }
+            var voucherButton = document.getElementById('voucherButton');
+            voucherButton.innerHTML = `<span>${selectedValue ? selectedValue : 'Voucher'}</span>`;
+            toggleDropdown('voucherContent');
+          } else if (type === 'bank') {
+            var bankOptions = document.getElementsByName('bank');
+            for (var i = 0; i < bankOptions.length; i++) {
+              if (bankOptions[i].checked) {
+                selectedValue = bankOptions[i].value;
+                break;
+              }
+            }
+            var bankButton = document.getElementById('bankButton');
+            bankButton.innerHTML = `<span>${selectedValue ? selectedValue : 'Metode Pembayaran'}</span>`;
+            toggleDropdown('bankContent');
+          }
+        }
+
+        function confirmTransaction() {
+          const form = document.createElement('form');
+          form.method = 'POST';
+          form.action = "{% url 'transaction' umkm.id%}";
+          form.innerHTML = '{% csrf_token %}input type="hidden" name="units" value=$(number)';
+          document.body.appendChild(form);
+          form.submit();
+        }
+      </script> {% endcomment %}
+
+      <footer>
+        <div class="support">
+          <p>Didukung dan Diawasi Oleh :</p>
+          <div class="logo">
+            <img src="{% static 'images/ojk-logo.png' %}" alt="ojk-logo" />
+            <img src="{% static 'images/afsi-logo.png' %}" alt="afsi-logo" />
+          </div>
+        </div>
+        <div class="menu">
+          <h3>Pelajari Kami</h3>
+          <a href="{% url 'aboutUslogged' %}">About Us</a>
+          <a href="#SnK">Syarat & Ketentuan</a>
+          <a href="#KebijakanPrivasi">Kebijakan Privasi</a>
+        </div>
+      </footer>
+</body>
+</html>

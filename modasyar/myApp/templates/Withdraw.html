@@ -1,0 +1,156 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModaSyar</title>
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/x-icon" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
+      rel="stylesheet"
+    />
+</head>
+<body>
+    <div class="nav">
+        <div class="logo">
+            <a href="{% url 'dashboardlogged' %}">  
+                <img src="{% static 'images/logo.png' %}" alt="logo">
+                <p>Moda<span style="color:#436850;">Syar</span></p>
+            </a>
+        </div>
+        <div class="item">
+            <a href="{% url 'explorelogged' %}" class="menu">
+                Telusuri UMKM
+            </a>
+            <a href="{% url 'tingkatkanmodal' %}" class="menu">
+                Tingkatkan Modal
+            </a>
+            <a href="{% url 'userdashboard' profile_id=profile.id %}" class="menu">
+                Profile
+            </a>
+        </div>
+    </div>
+    <div class="container-Withdraw">
+        <h1 class="h1-Wihtdraw">Withdraw</h1>
+        <button class="add-account" id="add-account-btn">
+            <b>Tambahkan E-Wallet</b> 
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+            </svg>                            
+        </button>
+        <div class="saved-accounts">
+            <div class="saved-accounts-header">
+                <b>E-Wallet Tersimpan</b>
+            </div>
+            <form method="post" action="{% url 'withdraw' %}">
+                {% csrf_token %}
+                <div class="accounts" id="accounts-list">
+                    {% for ewallet in ewallets %}
+                    <label>
+                        <input type="radio" name="account" value="{{ ewallet.wallet_type }}">
+                        <div class="account">
+                            <img src="{% static 'images/' %}{{ ewallet.wallet_type }}.png" alt="{{ ewallet.wallet_type }}">
+                            <span>{{ username }}<br>{{ ewallet.wallet_type }} {{ ewallet.wallet_number }}</span>
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+                {% if error_message %}
+                <p class="error-message">{{ error_message }}</p>
+                {% endif %}
+                <div class="withdraw-amount">
+                    {{ form.as_p }}
+                    <p>Saldo yang dapat ditransfer: Rp {{ money|currency_format }}</p>
+                    <p>*Jika saldo belum masuk ke Rekening Bank / E-Wallet Anda, mohon untuk menunggu maksimal 1x24 jam.</p>
+                    <button type="submit" class="confirm" id="confirm-btn">Konfirmasi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <div class="support">
+            <p>Didukung dan Diawasi Oleh :</p>
+            <div class="logo">
+                <img src="{% static 'images/ojk-logo.png' %}" alt="ojk-logo">
+                <img src="{% static 'images/afsi-logo.png' %}" alt="afsi-logo">
+            </div>
+        </div>
+        <div class="menu">
+            <h3>Pelajari Kami</h3>
+            <a href="{% url 'aboutUslogged' %}">About Us</a>
+            <a href="#SnK">Syarat & Ketentuan</a>
+            <a href="#KebijakanPrivasi">Kebijakan Privasi</a>
+        </div>
+    </footer>        
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addAccountBtn = document.getElementById('add-account-btn');
+            const amountInput = document.getElementById('amount');
+            const errorMessage = document.getElementById('error-message');
+            const maxAmount = {{ money }};
+            const minAmount = 10000;
+            const confirmBtn = document.getElementById('confirm-btn');
+            let isValidAmount = false;
+        
+            addAccountBtn.addEventListener('click', function() {
+                window.location.href = "{% url 'withdraw-form' %}";
+            });
+
+            amountInput.addEventListener('input', function() {
+                let value = parseInt(amountInput.value);
+                console.log('Amount input:', value); // Debugging statement
+                if (value > maxAmount) {
+                    errorMessage.textContent = `Max penarikan saldo anda adalah Rp${maxAmount.toLocaleString()}`;
+                    isValidAmount = false;
+                } else if (value < minAmount) { // Corrected typo here
+                    errorMessage.textContent = `Min penarikan saldo adalah Rp${minAmount.toLocaleString()}`;
+                    isValidAmount = false;
+                } else {
+                    errorMessage.textContent = '';
+                    isValidAmount = true;
+                }
+            });
+        
+            confirmBtn.addEventListener('click', function() {
+                const selectedAccount = document.querySelector('input[name="account"]:checked');
+                console.log('Selected account:', selectedAccount);
+                if (selectedAccount && isValidAmount) {
+                    window.location.href = "{% url 'withdraw-success' %}";
+                } else if (!isValidAmount) {
+                    showAlert('Maaf transaksi anda tidak dapat dilanjutkan karena saldo anda tidak cukup/minimal penarikan tidak terpenuhi');
+                } else {
+                    alert("Please select an account to withdraw to");
+                }
+            });
+        
+            function showAlert(message) {
+                const alertPopup = document.createElement('div');
+                alertPopup.classList.add('popup');
+                alertPopup.innerHTML = `
+                    <div class="popup-content">
+                        <span class="close-popup">&times;</span>
+                        <h2>Notification</h2>
+                        <p>${message}</p>
+                    </div>
+                `;
+                document.body.appendChild(alertPopup);
+        
+                document.querySelector('.close-popup').addEventListener('click', function() {
+                    document.body.removeChild(alertPopup);
+                });
+        
+                alertPopup.addEventListener('click', function(e) {
+                    if (e.target === alertPopup) {
+                        document.body.removeChild(alertPopup);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

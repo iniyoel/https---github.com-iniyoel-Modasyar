@@ -1,0 +1,98 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modasyar</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/x-icon" />
+</head>
+<body>
+    <div class="nav">
+        <div class="logo">
+            <a href="{% url 'dashboardlogged' %}">  
+                <img src="{% static 'images/logo.png' %}" alt="logo">
+                <p>Moda<span style="color:#436850;">Syar</span></p>
+            </a>
+        </div>
+        <div class="item">
+            <a href="{% url 'explorelogged' %}" class="menu">
+                Telusuri UMKM
+            </a>
+            <a href="{% url 'tingkatkanmodal' %}" class="menu">
+                Tingkatkan Modal
+            </a>
+            <a href="{% url 'userdashboard' profile_id=profile.id %}" class="menu">
+                Profile
+            </a>
+        </div>
+    </div>
+    <div class="user-dash">
+        <div class="user-menu">
+            <a href="{% url 'userdashboard' profile_id=profile.id %}">
+                Profil Pengguna
+            </a>
+            <a href="{% url 'investporto' %}">
+                Portofolio Investasi
+            </a>
+            <a href="{% url 'growth' %}">
+                Perkembangan Bisnis
+            </a>
+            <div class="logout">
+                <a href="{% url 'Dashboard' %}">
+                    Logout
+                </a>
+            </div>
+        </div>
+        {% for umkm in user_umkms %}
+        <div class="bisnis-growth">
+            <h1>Ringkasan Perkembangan Bisnis</h1>
+            <div class="bisnis-desc">
+                <div class="card">
+                    <img src="{{ umkm.foto_umkm.url }}" alt="bisnis">
+                </div>
+                <div class="bisnis-detail">
+                    <h1> {{ umkm.nama_umkm}}</h1>
+                    <p>Jenis Bagi Hasil : <strong> {{ umkm.jenis_bagi_hasil }} </strong></p>
+                    <p>Target Dana : <strong>Rp {{ umkm.target_dana|currency_format }}</strong></p>
+                    <p>Jenis Industri : <strong>{{ umkm.industri }}</strong></p>
+                </div>
+            </div>
+
+            <table id="historyInvestor">
+                <tr>
+                    <th>Investor</th>
+                    <th>Jumlah Pendanaan (IDR)</th>
+                    <th>Tanggal</th>
+                </tr>
+                {% for transaction in transactions %}
+                <tr>
+                  <td>{{ transaction.user}}</td>
+                  <td>Rp {{ transaction.total_investment|currency_format }}</td>
+                  <td>{{ transaction.transaction_date }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+    <script src="script.js"></script>
+    <footer>
+        <div class="support">
+          <p>Didukung dan Diawasi Oleh :</p>
+          <div class="logo">
+            <img src="{% static 'images/ojk-logo.png' %}" alt="ojk-logo" />
+            <img src="{% static 'images/afsi-logo.png' %}" alt="afsi-logo" />
+          </div>
+        </div>
+        <div class="menu">
+          <h3>Pelajari Kami</h3>
+          <a href="{% url 'aboutUslogged' %}">About Us</a>
+          <a href="#SnK">Syarat & Ketentuan</a>
+          <a href="#KebijakanPrivasi">Kebijakan Privasi</a>
+        </div>
+      </footer>
+</body>
+</html>
